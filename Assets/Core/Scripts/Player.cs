@@ -1,10 +1,12 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     private Rigidbody _rigidbody;
     [SerializeField] private int _speed = 3;
+    [SerializeField] private int _JumpForce = 10;
     private PlayerInputAction _playerinputaction = new PlayerInputAction();
 
     private void Start()
@@ -12,10 +14,16 @@ public class Player : MonoBehaviour
 
         _rigidbody = GetComponent<Rigidbody>();
         _playerinputaction = new PlayerInputAction();
+        _playerinputaction.Player.Jump.performed += Jump_performed; ;
+        
         _playerinputaction.Enable();
-
+        
     }
 
+    private void Jump_performed(InputAction.CallbackContext obj)
+    {
+        _rigidbody.AddForce(Vector3.up * _JumpForce); //new Vector3(0, 1, 0)
+    }
 
     private void Update()
     {
